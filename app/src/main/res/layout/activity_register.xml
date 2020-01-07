@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.RegisterActivity"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:background="#ffffff"
+    >
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        app:errorEnabled="true"
+        android:layout_marginTop="40dp"
+        >
+
+        <EditText
+            android:layout_width="190dp"
+            android:layout_height="41dp"
+            android:id="@+id/register_fullNameId"
+            android:layout_marginTop="20dp"
+            android:height="41dp"
+            android:hint="@string/full_name"
+            android:inputType="textPersonName"
+            android:textColorHint="@color/colorPrimary" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_input_userNameID"
+        android:gravity="center_horizontal"
+        app:errorEnabled="true"
+        android:layout_marginTop="20dp"
+        >
+        <EditText android:layout_height="41dp"
+            android:layout_width="190dp"
+            android:id="@+id/register_emailId"
+            android:height="41dp"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress"
+            android:layout_marginTop="20dp"
+            android:textColorHint="@color/colorPrimary"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:layout_marginTop="20dp"
+        >
+        <com.hbb20.CountryCodePicker
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/register_countryCodeId"
+            android:layout_weight="1"
+            app:ccp_textSize="16sp"
+            android:gravity="center"
+            app:ccp_autoDetectCountry="true"
+            app:ccp_showNameCode="true"
+            />
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="41dp"
+            android:layout_weight="2"
+            android:id="@+id/register_phoneNumberId"
+            android:layout_marginTop="20dp"
+            android:inputType="phone"
+            android:hint="@string/phonenumber"
+            android:textColorHint="@color/grey"
+            android:maxLength="13"
+            android:digits="0123456789"
+            />
+</LinearLayout>
+
+    <Button android:layout_height="41dp"
+        android:layout_width="match_parent"
+        android:id="@+id/register_registerId"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/register"
+        android:textColor="@color/green_light"
+        android:background="@drawable/button_shape"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text=" Already Have an account ?"
+        android:textSize="25sp"
+        android:textColor="@color/green_light"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/grey"
+        android:layout_marginTop="30dp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="OR"
+        android:textSize="20sp"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/grey"
+        android:layout_marginTop="3dp"
+        />
+
+    <ProgressBar android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:id="@+id/register_progressBarId"
+        android:layout_marginTop="10dp"
+        android:visibility="invisible"
+        />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/register_googleAccountId"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:cropToPadding="true"
+        android:background="@drawable/button_shape"
+        android:layout_marginTop="40dp"
+        android:text="Have a Facebook/Email account?"
+        android:textColor="@color/green_light"
+        />
+</LinearLayout>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Fragments.AccountFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+        <LinearLayout android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            >
+            <ImageView
+                android:layout_width="200dp"
+                android:layout_height="100dp"
+                android:id="@+id/accountF_userImageId"
+                android:layout_marginTop="60dp"
+                android:src="@drawable/iron"
+                />
+        </LinearLayout>
+
+        <TextView android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:id="@+id/accountF_userNameId"
+            android:text="NAME"
+            android:textAlignment="center"
+            android:textSize="35sp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="70dp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            />
+
+        <LinearLayout android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginTop="2dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/accountF_userEmailId"
+                android:text="Email"
+                android:textSize="12sp"
+                android:layout_marginLeft="25dp"
+                />
+            <TextView android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:id="@+id/accountF_userPhoneNumberId"
+                android:text="phone"
+                android:textSize="12sp"
+                android:layout_marginLeft="2dp"
+                />
+        </LinearLayout>
+        <TextView android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="15dp"
+            android:text="Saved Places"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="25sp"
+            />
+
+        <TextView android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:id="@+id/accountF_userAddressId"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="5dp"
+            android:text="Address Will come Here"
+            android:textColor="@color/black"
+            android:textStyle="italic"
+            android:textSize="22sp"
+            android:drawableLeft="@drawable/ic_location_on_black_24dp"
+            />
+
+        <TextView android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:id="@+id/accountF_referId"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="15dp"
+            android:text="@string/refer"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="25sp"
+            />
+
+        <TextView android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:id="@+id/accountF_helpId"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="20dp"
+            android:text="Help"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="25sp"
+            />
+        <TextView android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:id="@+id/accountF_aboutId"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="20dp"
+            android:text="About Us"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="25sp"
+            />
+        <TextView android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:id="@+id/accountF_termsId"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/terms"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="25sp"
+            />
+        <Button android:layout_height="41dp"
+            android:layout_width="match_parent"
+            android:id="@+id/accountF_logoutId"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="40dp"
+            android:text="@string/logout"
+            android:textColor="@color/green_light"
+            android:background="@drawable/button_shape"
+            />
+
+    </LinearLayout>
+</FrameLayout>

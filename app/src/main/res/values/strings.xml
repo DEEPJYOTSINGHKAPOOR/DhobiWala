@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">DhobiWala</string>
+    <string name="full_name">Full Name</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="phonenumber">Mobile Number</string>
+    <string name="register">Register</string>
+    <string name="laundry_status">Choose the laundry service, which you are interested in today.</string>
+    <string name="home">Home</string>
+    <string name="myorders">My Orders</string>
+    <string name="promotions">Promotions</string>
+    <string name="cart">Cart</string>
+    <string name="account">Account</string>
+    <string name="google_map_api_key">AIzaSyCdo_HjMtCQDI0AiYe1oKmjLE6iQuRqMUk</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="refer"><![CDATA[Refer & Earn]]></string>
+    <string name="terms"><![CDATA[Terms & Services]]></string>
+    <string name="logout">Log Out</string>
+    <string name="privacy_policy_string">By proceeding you agree to the <font color='#269131'>Terms of Use</font> and<font color='#269131'> Privacy Policy</font></string>
+</resources>
