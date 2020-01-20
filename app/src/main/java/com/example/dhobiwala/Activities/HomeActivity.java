@@ -1,29 +1,20 @@
 package com.example.dhobiwala.Activities;
 
+import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuItem;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.GridView;
-
-import com.example.dhobiwala.Adapters.HomeAdapter;
 import com.example.dhobiwala.Fragments.AccountFragment;
 import com.example.dhobiwala.Fragments.CartFragment;
 import com.example.dhobiwala.Fragments.HomeFragment;
 import com.example.dhobiwala.Fragments.OrdersFragment;
 import com.example.dhobiwala.Fragments.PromotionsFragment;
-import com.example.dhobiwala.Models.HomeModel;
 import com.example.dhobiwala.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.ArrayList;
 
 public class HomeActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "HomeActivity";
@@ -38,6 +29,9 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
 //        setContentView(R.layout.fit_in_grid_layout);
         Log.d(TAG, "onCreate: ");
         init();
+
+//        calculate_PrintCost();
+
     }
 
     private void init() {
@@ -90,4 +84,18 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
         }
         return false;
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        bottomNavigationView.setSelectedItemId(R.id.home_navigaionButtonId);
+    }
+
+
+
+
+
+
+
 }

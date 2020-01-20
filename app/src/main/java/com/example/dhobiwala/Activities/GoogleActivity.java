@@ -1,7 +1,4 @@
-package com.example.dhobiwala.LoginActivities;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+package com.example.dhobiwala.Activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,11 +7,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.dhobiwala.Activities.EnterMobileNumberActivity;
-import com.example.dhobiwala.Activities.HomeActivity;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.dhobiwala.DatabaseModels.UsersModel;
 import com.example.dhobiwala.Helper.SignInThrough;
 import com.example.dhobiwala.Helper.UserDetailsSharedPrefernces;
-import com.example.dhobiwala.DatabaseModels.UsersModel;
 import com.example.dhobiwala.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -30,13 +28,17 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import static com.example.dhobiwala.Activities.RegisterActivity.PHOTO_URI;
 
-public class GoogFaceActivity extends AppCompatActivity {
-    private static final String TAG = "GoogFaceActivity";
+public class GoogleActivity extends AppCompatActivity {
+    private static final String TAG = "GoogleActivity";
     private static final int RC_SIGN_IN = 2;
     private static String ID_TOKEN_OF_USER ;
     private static  String PHOTO_OF_USER  ;
@@ -57,18 +59,20 @@ public class GoogFaceActivity extends AppCompatActivity {
         setContentView(R.layout.activity_goog_face);
         Log.d(TAG, "onCreate: Sucessful");
         init();
+
     }
 
+//2562902873
     private void init() {
         mSignInButton=findViewById(R.id.googleSignInButtonId);
-
+//        mFbLoginButton=findViewById(R.id.fbLoginButton);
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
         mFirebaseAuth= FirebaseAuth.getInstance();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        mDatabaseReference=FirebaseDatabase.getInstance().getReference().child("Users");
+        mDatabaseReference=FirebaseDatabase.getInstance().getReference().child("USERS");
 
         mSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,7 +80,6 @@ public class GoogFaceActivity extends AppCompatActivity {
                 signIn();
             }
         });
-
 
     }
 
@@ -110,26 +113,23 @@ public class GoogFaceActivity extends AppCompatActivity {
                 }
                 ID_TOKEN_OF_USER=account.getIdToken() ;
 
-                sendDataToFireBase();
+//                sendDataToFireBase();
                 mSharedPreferences= getBaseContext().getSharedPreferences("USER_DETAILS_SHARED_PREFERENCE",MODE_PRIVATE);
                 SharedPreferences.Editor editor = mSharedPreferences.edit();
                 editor.putString(UserDetailsSharedPrefernces.userName,NAME_OF_USER);
                 editor.putString(UserDetailsSharedPrefernces.userEmail,EMAIL_OF_USER);
                 editor.putString(UserDetailsSharedPrefernces.userProfilePhoto,PHOTO_OF_USER);
-                editor.putString(UserDetailsSharedPrefernces.userIdToken,ID_TOKEN_OF_USER);
+             //   editor.putString(UserDetailsSharedPrefernces.userIdToken,ID_TOKEN_OF_USER);
                 editor.apply();
-
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e);
                 Log.e(TAG, "onActivityResult: "+e.getLocalizedMessage() );
-                Toast.makeText(GoogFaceActivity.this, "Sign in failed "+e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                Toast.makeText(GoogFaceActivity.this, "Check your internet connection.", Toast.LENGTH_SHORT).show();
-                // ...
+                Toast.makeText(GoogleActivity.this, "Sign in failed "+e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(GoogleActivity.this, "Check your internet connection.", Toast.LENGTH_SHORT).show();
             }
         }
     }
-
     private void firebaseAuthWithGoogle(GoogleSignInAccount account)
     {
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
@@ -138,28 +138,51 @@ public class GoogFaceActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mFirebaseAuth.getCurrentUser();
+                            // Sign in success, update UI with the signed-in user's information.
 
-                            Intent intent=new Intent(GoogFaceActivity.this, HomeActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK) ;
-                            intent.putExtra("user_name",NAME_OF_USER);
-                            intent.putExtra("user_email",EMAIL_OF_USER);
-                            intent.putExtra("user_photo",PHOTO_OF_USER);
-                            intent.putExtra("user_google_authentication_id",ID_TOKEN_OF_USER);
-                            startActivity(intent);
-//                            updateUI(user);
+
+                            Query query=FirebaseDatabase.getInstance().getReference().child("USERS").orderByChild("userEmail");
+
+                            query.equalTo(EMAIL_OF_USER).addListenerForSingleValueEvent(new ValueEventListener() {
+
+                                String key=null;
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    for(DataSnapshot dataSnapshot1:dataSnapshot.getChildren()){
+                                        key=dataSnapshot1.getKey();
+                                    }
+                                    if(key!=null){
+                                        Toast.makeText(GoogleActivity.this, "Welcome to DhobiWala.", Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(GoogleActivity.this,HomeActivity.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        startActivity(intent);
+                                    }else{
+                                        Log.d(TAG, "signInWithCredential:success");
+                                        FirebaseUser user = mFirebaseAuth.getCurrentUser();
+
+                                        Intent intent=new Intent(GoogleActivity.this, EnterMobileNumberActivity.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK) ;
+
+                                        intent.putExtra("user_name",NAME_OF_USER);
+                                        intent.putExtra("user_email",EMAIL_OF_USER);
+                                        intent.putExtra("user_photo",PHOTO_OF_USER);
+                                        intent.putExtra("user_google_authentication_id",ID_TOKEN_OF_USER);
+
+                                        startActivity(intent);
+                                    }
+                                }
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    Log.e(TAG, "onCancelled: ",databaseError.toException() );
+                                }
+                            });
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
 
                             View parentLayout = findViewById(android.R.id.content);
                             Snackbar.make(parentLayout/*findViewById(R.id.main_layout)*/, "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
-//                            updateUI(null);
                         }
-
-                        // ...
                     }
                 });
     }
@@ -174,6 +197,5 @@ public class GoogFaceActivity extends AppCompatActivity {
         Log.d(TAG, "sendDataToFireBase: DATA sent to server successfully.");
 
     }
-
 
 }

@@ -16,12 +16,12 @@
         />
     <item android:title="@string/cart"
         android:id="@+id/cart_navigaionButtonId"
-        android:icon="@drawable/baseline_receipt_black_18dp"
+        android:icon="@drawable/ic_shopping_cart_black_24dp"
         />
 
     <item android:title="@string/account"
         android:id="@+id/account_navigaionButtonId"
-        android:icon="@drawable/baseline_receipt_black_18dp"
+        android:icon="@drawable/ic_person_black_24dp"
         />
 
 </menu>

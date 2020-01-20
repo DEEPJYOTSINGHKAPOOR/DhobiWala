@@ -1,6 +1,8 @@
 package com.example.dhobiwala.Activities;
 
 import android.Manifest;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -10,6 +12,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,6 +24,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.dhobiwala.Helper.UserDetailsSharedPrefernces;
 import com.example.dhobiwala.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -32,12 +36,20 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
+
+
+    int MAX_ADDRESS_ALLOWED=3;
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -46,7 +58,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         if(mLocationPermissionsGranted){
-            getDeviceLocation();
+//            getDeviceLocation();
 
             if(ActivityCompat.checkSelfPermission(this.getApplicationContext(),
                     FINE_LOCATION) != PackageManager.PERMISSION_GRANTED  && ActivityCompat.checkSelfPermission(this.getApplicationContext(),
@@ -74,6 +86,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     //widgets
 
     private EditText mSearchText ;
+    private EditText mMainAdrees;
+    private EditText mApartmentName ;
+    private EditText mLandmark ;
+    private EditText mBuildingName ;
+    private EditText mArea ;
+    private Button mSaveButton ;
+    private Button mProceed ;
 
 
 
@@ -91,9 +110,27 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_map);
         mSearchText=findViewById(R.id.map_inputTextId);
         mGps=findViewById(R.id.map_mGpsId);
+        mMainAdrees=findViewById(R.id.map_mainAddressId);
+        mApartmentName=findViewById(R.id.map_apartmentNameId);
+        mLandmark=findViewById(R.id.map_landmarkId);
+        mBuildingName=findViewById(R.id.map_businessOrBuildingNameId);
+        mArea=findViewById(R.id.map_areaOrDistrictId);
+        mSaveButton=findViewById(R.id.map_saveButton);
 
+        mMainAdrees.setCursorVisible(false);
+        mMainAdrees.setLongClickable(false);
+        mMainAdrees.setClickable(false);
+        mMainAdrees.setFocusable(false);
+        mMainAdrees.setSelected(false);
+        mMainAdrees.setKeyListener(null);
+//        mProceed=findViewById(R.id.map_proceedButton);
+        
         getLocationPermission();
+
+        saveButtonClicked();
+
     }
+
 
     private void init()
     {
@@ -111,7 +148,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                     Toast.makeText(MapActivity.this, "Geolocating.", Toast.LENGTH_SHORT).show();
                     Log.d(TAG, "onEditorAction: Yo I am in.");
-                    geoLocate();
+                    geoLocateForInputSearch();
+
 
                 }else{
                     Toast.makeText(MapActivity.this, "In else//////", Toast.LENGTH_SHORT).show();
@@ -129,11 +167,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         });
 
-
     }
 
-    private void geoLocate() {
-        Log.d(TAG, "geoLocate: geolocaitng");
+
+    // from the search string move the camera to that location.
+    private void geoLocateForInputSearch() {
+
+        Log.d(TAG, "geoLocateForInputSearch: geolocaitng");
 
         String searchString = mSearchText.getText().toString() ;
 
@@ -144,24 +184,41 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         try {
             list=geocoder.getFromLocationName(searchString,1);
+//            list=geocoder.
         }
         catch (IOException e){
-            Log.e(TAG, "geoLocate: ", e);
+            Log.e(TAG, "geoLocateForInputSearch: ", e);
         }
         if(list.size()>0){
             Address address;
             address = list.get(0);
 
-            Toast.makeText(MapActivity.this, "geoLocate: Location is  : "+ address.toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(MapActivity.this, "geoLocateForInputSearch: Location is  : "+ address.toString(), Toast.LENGTH_SHORT).show();
 
-            Log.d(TAG, "geoLocate: Location is  : "+ address.toString());
+            Log.d(TAG, "geoLocateForInputSearch: Location is  : "+ address.toString());
 
             moveCamera1(new LatLng(address.getLatitude(),address.getLongitude()),DEFAULT_ZOOM,address.getAddressLine(0));
 
-
+            mMainAdrees.setText(address.getAddressLine(0));
+        }
+    }
+   private void geoLocateForCurrentLocation(double currentLatitude,double currentLongitude){
+        Geocoder geocoder =new Geocoder(MapActivity.this);
+        List<Address> list=new ArrayList<>();
+        try {
+            list=geocoder.getFromLocation(currentLatitude,currentLongitude,1);
+        }catch (IOException e) {
+            e.printStackTrace();
         }
 
-    }
+        if(list.size()>0){
+            Address address ;
+            address=list.get(0);
+            Log.d(TAG, "geoLocateForCurrentLocation: "+address.toString()+" \naddress Lines"+address.getAddressLine(0));
+            moveCamera1(new LatLng(currentLatitude,currentLongitude),DEFAULT_ZOOM ,"My Location");
+            mMainAdrees.setText(address.getAddressLine(0));
+        }
+   }
 
 
     private void getDeviceLocation() throws SecurityException {
@@ -172,7 +229,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         if(mLocationPermissionsGranted){
             final Task location=mFusedLocationProviderClient.getLastLocation();
-            location.addOnCompleteListener(new OnCompleteListener() {
+            location.addOnCompleteListener(
+                    new OnCompleteListener() {
                 @Override
                 public void onComplete(@NonNull Task task) {
                     if(task.isSuccessful()){
@@ -181,6 +239,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         assert currentLocation != null;
                         try{
                             moveCamera1(new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude()),DEFAULT_ZOOM ,"My Location");
+                            geoLocateForCurrentLocation(currentLocation.getLatitude(),currentLocation.getLongitude());
                         }catch(Exception e){
                             Toast.makeText(MapActivity.this, "Please turn on your mobile location or ", Toast.LENGTH_SHORT).show();
                         }
@@ -198,7 +257,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         Log.d(TAG, "moveCamera: Moving the camera to latitide : "+latLng.latitude+", long: "+latLng.longitude);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,zoom));
 
-        if(!title.equals("My Location")){
+        if(!title.equals("My Location") || true){
             MarkerOptions options = new MarkerOptions()
                     .position(latLng)
                     .title(title);
@@ -261,4 +320,78 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         }
     }
+
+
+
+    private void saveButtonClicked() {
+        mSaveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: On button clicked. ");
+
+                if(mMainAdrees.getText().toString().isEmpty()){
+                    mSearchText.setError("Please select your address");
+                    mSearchText.requestFocus();
+                    return ;
+                }
+
+                if(mApartmentName.getText().toString().isEmpty()){
+                    mApartmentName.setError("Enter this field");
+                    mApartmentName.requestFocus();
+                    return ;
+                }
+                if(mBuildingName.getText().toString().isEmpty()){
+                    mBuildingName.setError("Enter this field");
+                    mBuildingName.requestFocus();
+                    return ;
+                }
+                if(mLandmark.getText().toString().isEmpty()){
+                    mLandmark.setError("Enter this field");
+                    mLandmark.requestFocus();
+                    return ;
+                }
+                if(mArea.getText().toString().isEmpty()){
+                    mLandmark.setError("Enter this field");
+                    mLandmark.requestFocus();
+                    return ;
+                }
+                        Log.d(TAG, "onClick: save button clicked");
+                        String mainAddress=mMainAdrees.getText().toString() ;
+                        String aptNumber=mApartmentName.getText().toString() ;
+                        String landmark=mLandmark.getText().toString() ;
+                        String buildingName=mBuildingName.getText().toString() ;
+                        String area =mArea.getText().toString() ;
+                        Log.d(TAG, "onClick: "+" ininin.");
+                       sendAddressToDatabase(mainAddress,aptNumber,landmark,buildingName,area);
+                        SharedPreferences sharedPreferences =getApplicationContext().getSharedPreferences(UserDetailsSharedPrefernces.sharedPreferences,MODE_PRIVATE);
+                        SharedPreferences.Editor mEditor =sharedPreferences.edit() ;
+                        mEditor.putString(UserDetailsSharedPrefernces.addressOfUser,mainAddress);
+                        mEditor.apply();
+                        startActivity(new Intent(MapActivity.this,HomeActivity.class));
+                    }
+        });
+    }
+    private void sendAddressToDatabase(String mainAddress, String aptNumber, String landmark, String buildingName, String area) {
+        Log.d(TAG, "sendAddressToDatabase: inininin");
+        SharedPreferences sharedPreferences=getApplicationContext().getSharedPreferences(UserDetailsSharedPrefernces.sharedPreferences,MODE_PRIVATE);
+        String userKey=sharedPreferences.getString(UserDetailsSharedPrefernces.userKeyOfDatabase,"12345");
+        Log.d(TAG, "sendAddressToDatabase: "+" userKey is  : "+userKey);
+        DatabaseReference mDatabaseReference= FirebaseDatabase.getInstance().getReference().child("USERS").child(sharedPreferences.getString(UserDetailsSharedPrefernces.userKeyOfDatabase,"12345"));
+        Map<String,List>map = new HashMap<>();
+        List<String> addressList=new ArrayList<>();
+
+        addressList.add(mainAddress);
+        addressList.add(aptNumber);
+        addressList.add(landmark);
+        addressList.add(buildingName);
+        addressList.add(area);
+
+        map.put("address",addressList);
+
+        mDatabaseReference.push().setValue(map);
+//        mDatabaseReference.child(mDatabaseReference.getKey()).setValue(map);
+        mDatabaseReference.child("ADDRRESS").setValue(map);
+
+    }
 }
+//"+13347817196"

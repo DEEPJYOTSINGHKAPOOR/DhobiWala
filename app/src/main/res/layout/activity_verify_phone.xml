@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:text="VERIFY"
         android:background="@drawable/button_shape"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/green_light"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="30dp"

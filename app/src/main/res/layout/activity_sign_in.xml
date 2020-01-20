@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.SignInActivity"
+    android:orientation="vertical"
+    >
+
+    <TextView android:layout_height="80dp"
+        android:layout_width="200dp"
+        android:text="Sign In"
+        android:textColor="@color/green_light"
+        android:textSize="40sp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:layout_marginTop="20dp"
+        android:weightSum="3"
+        >
+        <com.hbb20.CountryCodePicker
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/signIn_countryCodeId"
+            android:layout_weight="1"
+            app:ccp_textSize="16sp"
+            android:gravity="center"
+            app:ccp_autoDetectCountry="true"
+            app:ccp_showNameCode="true"
+            />
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="41dp"
+            android:layout_weight="2"
+            android:id="@+id/signIn_phoneNumberId"
+            android:layout_marginTop="20dp"
+            android:inputType="phone"
+            android:hint="@string/phonenumber"
+            android:textColorHint="@color/grey"
+            android:maxLength="13"
+            android:digits="0123456789"
+            />
+    </LinearLayout>
+    <Button android:layout_height="40dp"
+        android:layout_width="match_parent"
+        android:id="@+id/signIn_loginButtonId"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/button_shape"
+        android:text="LOGIN"
+        android:textSize="20sp"
+        android:textColor="@color/green_light"
+        />
+
+</LinearLayout>

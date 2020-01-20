@@ -56,6 +56,10 @@ dependencies {
     //google maps
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
 
+    //facebookAuth
+    //noinspection GradleDependency
+//    implementation 'com.facebook.android:facebook-android-sdk:[5,6)'
+
 
 }
 apply plugin: 'com.google.gms.google-services'

@@ -11,4 +11,11 @@
     <color name="white">#ffffff</color>
     <color name="green_light">#269131</color>
 
+    <color name="slider_background">#FFFFFF</color>
+
+    <color name="active_dots">#FF3F51B5</color>
+    <color name="inactive_dots">#FF726C6C</color>
+
+
+
 </resources>

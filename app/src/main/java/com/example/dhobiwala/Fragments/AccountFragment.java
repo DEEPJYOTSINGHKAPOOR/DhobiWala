@@ -6,10 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,20 +14,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.dhobiwala.Activities.ProfileActivity;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+
 import com.example.dhobiwala.Activities.RegisterActivity;
 import com.example.dhobiwala.Helper.SignInThrough;
+import com.example.dhobiwala.Helper.UserDetailsSharedPrefernces;
 import com.example.dhobiwala.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInApi;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.squareup.picasso.Picasso;
-
-import org.w3c.dom.Text;
 
 import java.net.URL;
 
@@ -59,6 +55,9 @@ public class AccountFragment extends Fragment {
     private String userImageString1 ;
     private URL userImageUrl;
     private String userEmail1 ;
+    private String phoneNumber1 ;
+    private String myAddress1 ;
+
 //    private SharedPreferences mSharedPreferences ;
 
 
@@ -85,21 +84,19 @@ public class AccountFragment extends Fragment {
         mUserEmail=view.findViewById(R.id.accountF_userEmailId);
         mLogout=view.findViewById(R.id.accountF_logoutId);
 
-        SharedPreferences mSharedPreferences =thisContext.getSharedPreferences("USER_DETAILS_SHARED_PREFERENCE",MODE_PRIVATE);
+        SharedPreferences mSharedPreferences =thisContext.getSharedPreferences(UserDetailsSharedPrefernces.sharedPreferences,MODE_PRIVATE);
 
-        userName1=mSharedPreferences.getString("NAME_OF_USER","");
+        userName1=mSharedPreferences.getString(UserDetailsSharedPrefernces.userName,"Default Name of User");
 
-//        if(SignInThrough.GOOGLE_SIGN_IN=true){
-//            if(userImageString1 != null || userImageString1!="") {
-//                Picasso.get().load(userImageString1).into(mUserImage);
-//            }
-//
-//        }
-        userImageString1=mSharedPreferences.getString("PHOTO_OF_USER","");
+        userImageString1=mSharedPreferences.getString(UserDetailsSharedPrefernces.userProfilePhoto,"");
+
+        userEmail1=mSharedPreferences.getString(UserDetailsSharedPrefernces.userEmail,"Default Email Id") ;
 
 
-        userEmail1=mSharedPreferences.getString("EMAIL_OF_USER","") ;
-        
+        phoneNumber1=mSharedPreferences.getString(UserDetailsSharedPrefernces.userPhoneNumber,"Default Phone Number");
+
+        myAddress1=mSharedPreferences.getString(UserDetailsSharedPrefernces.addressOfUser,"Default address");
+
         
         String[] fullName=userName1.split(" ");
 
@@ -115,7 +112,8 @@ public class AccountFragment extends Fragment {
 
         mUserEmail.setText(userEmail1);
         mUserName.setText(nameToPrint);
-
+        mPhoneNumber.setText(phoneNumber1);
+        mUserAddress.setText(myAddress1);
         //logout
         mLogout.setOnClickListener(new View.OnClickListener() {
             @Override

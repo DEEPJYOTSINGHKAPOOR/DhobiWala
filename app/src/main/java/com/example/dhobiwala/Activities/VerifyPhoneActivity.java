@@ -105,6 +105,7 @@ public class VerifyPhoneActivity extends AppCompatActivity {
             Toast toast = Toast.makeText(getApplicationContext(), "Verification Code is wrong, try again", Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER,0,0);
             toast.show();
+            finish();
         }
     }
 
@@ -116,17 +117,22 @@ public class VerifyPhoneActivity extends AppCompatActivity {
                         if(task.isSuccessful()){
                             SharedPreferences sharedPreferences = getBaseContext().getSharedPreferences(UserDetailsSharedPrefernces.sharedPreferences,MODE_PRIVATE);
                             SharedPreferences.Editor editor=sharedPreferences.edit() ;
-                            editor.putString("phone_no",phoneNumber1);
+                            editor.putString(UserDetailsSharedPrefernces.userPhoneNumber,phoneNumber1);
+
+                            editor.putBoolean(UserDetailsSharedPrefernces.phoneNumberVerified,true);
+
+                            editor.apply();
+
 
                             sendToDatabase();
 
-
-                            Intent intent =new Intent(VerifyPhoneActivity.this,HomeActivity.class);
+                            Intent intent =new Intent(VerifyPhoneActivity.this,MapActivity.class);
 
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
 
                         }else{
+                            Log.e(TAG, "onComplete: "+task.getException().getMessage() );
                             Toast.makeText(VerifyPhoneActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -135,10 +141,21 @@ public class VerifyPhoneActivity extends AppCompatActivity {
 
     private void sendToDatabase()
     {
-
         DatabaseReference mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("USERS") ;
         DatabaseReference newRefernce = mDatabaseReference.push();
-         userKey1=mDatabaseReference.push().getKey();
+         userKey1=newRefernce.getKey();
+        Log.d(TAG, "sendToDatabase: Success");
+
+         //userkey ko sharedPrefernces mee   push karo.
+
+         SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(UserDetailsSharedPrefernces.sharedPreferences,MODE_PRIVATE);
+         
+         SharedPreferences.Editor mEditor =sharedPreferences.edit();
+
+         mEditor.putString(UserDetailsSharedPrefernces.userKeyOfDatabase,userKey1);
+
+//        mEditor.put(UserDetailsSharedPrefernces.refernceToEnterInUserDocument,newRefernce);
+        mEditor.apply();
 
         UsersModel user =new UsersModel() ;
 

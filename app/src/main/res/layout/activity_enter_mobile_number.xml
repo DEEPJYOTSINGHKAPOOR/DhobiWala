@@ -44,7 +44,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:id="@+id/countryCodeId"
-            android:layout_weight="0.5"
+            android:layout_weight="1.5"
             app:ccp_textSize="16sp"
             app:ccp_showNameCode="true"
             android:gravity="center"
@@ -61,7 +61,7 @@
             android:hint="@string/phonenumber"
             android:textColorHint="@color/grey"
             android:maxLength="13"
-            android:digits="0123456789"
+            android:digits="0123456789+-"
             />
     </LinearLayout>
 

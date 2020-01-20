@@ -1,7 +1,5 @@
 package com.example.dhobiwala.Activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +7,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.dhobiwala.R;
 import com.hbb20.CountryCodePicker;
@@ -48,7 +48,7 @@ public class EnterMobileNumberActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 //taking input of the phone number .
-                String phoneNumber1 =mPhoneNumber.getText().toString().trim() ;
+                String phoneNumber1 =mPhoneNumber.getText().toString();
 
 
                 if(phoneNumber1.length() < 10){
@@ -56,7 +56,7 @@ public class EnterMobileNumberActivity extends AppCompatActivity {
                     mPhoneNumber.requestFocus();
                     return;
                 }else{
-                    String fullPhoneNumber1=mCountryCodePicker.getFullNumberWithPlus()+ phoneNumber1 ;
+                    String fullPhoneNumber1="+"+mCountryCodePicker.getFullNumber()+ phoneNumber1 ;
                     String userName1=getIntent().getStringExtra("user_name");
                     String userEmail1=getIntent().getStringExtra("user_email");
                     String userAuthId1=getIntent().getStringExtra("user_google_authentication_id");
@@ -66,7 +66,6 @@ public class EnterMobileNumberActivity extends AppCompatActivity {
 
                     Log.d(TAG, "onClick: "+"Continue button Clicked" );
                     intent.putExtra("phone_number",fullPhoneNumber1);
-
                     intent.putExtra("user_name",userName1);
                     intent.putExtra("user_email",userEmail1);
                     intent.putExtra("user_photo",userPhoto1);
